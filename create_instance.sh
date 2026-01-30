@@ -38,13 +38,13 @@ do
 
     fi
     echo "Instance ID of ${instance} is ${INSTANCE_ID}"
-    
+
 fi
     
     if [ $instance == 'frontend' ]; then
         IP=$(
     aws ec2 describe-instances \
-    --filters "Name=instance-id,Values=$INSTANCE_ID" \
+    --instance-ids "$INSTANCE_ID" \
     --query 'Reservations[].Instances[].PublicIpAddress' \
     --output text
     )
@@ -54,13 +54,19 @@ fi
     else
       IP=$(
     aws ec2 describe-instances \
-    --filters "Name=instance-id,Values=$INSTANCE_ID" \
+    --instance-ids "$INSTANCE_ID" \
     --query 'Reservations[].Instances[].PrivateIpAddress' \
     --output text
     )
 
     RECORD_NAME="$instance.$DOMAIN_NAME" 
-    fi
+fi
+
+if [ -z "$IP" ]; then
+  echo "No IP found for $instance (ID: $INSTANCE_ID). Skipping DNS update."
+  continue
+fi
+
 
     echo " IP Addresses of $instance is ${IP}"
 
