@@ -14,11 +14,10 @@ do
     --query 'Reservations[*].Instances[*].InstanceId' \
     --output text)
 
-    if [ -n "$EXISTING_ID" ]; then
+if [ -n "$EXISTING_ID" ]; then
     echo "Instance ${instance} already present (ID: $EXISTING_ID). Skipping creation." INSTANCE_ID=$EXISTING_ID
     else 
-       if [ "$instance" == "mongodb" ] || [ "$instance" == "mysql" ] || [ "$instance" == "shipping" ]; then
-
+    if [ "$instance" == "mongodb" ] || [ "$instance" == "mysql" ] || [ "$instance" == "shipping" ]; then
     INSTANCE_ID=$(aws ec2 run-instances \
     --image-id $AMI_ID \
     --instance-type t3.medium \
@@ -36,15 +35,17 @@ do
     --query 'Instances[0].InstanceId' \
     --output text)
 
+    
+
     fi
     echo "Instance ID of ${instance} is ${INSTANCE_ID}"
 
 fi
     
-    if [ $instance == 'frontend' ]; then
-        IP=$(
+if [ $instance == 'frontend' ]; then
+    IP=$(
     aws ec2 describe-instances \
-    --instance-ids "$INSTANCE_ID" \
+    --filters "Name=instance-id,Values=$INSTANCE_ID" \
     --query 'Reservations[].Instances[].PublicIpAddress' \
     --output text
     )
@@ -52,22 +53,15 @@ fi
     RECORD_NAME="$DOMAIN_NAME"
 
     else
-      IP=$(
+    IP=$(
     aws ec2 describe-instances \
-    --instance-ids "$INSTANCE_ID" \
+    --filters "Name=instance-id,Values=$INSTANCE_ID" \
     --query 'Reservations[].Instances[].PrivateIpAddress' \
     --output text
     )
 
     RECORD_NAME="$instance.$DOMAIN_NAME" 
 fi
-
-if [ -z "$IP" ]; then
-  echo "No IP found for $instance (ID: $INSTANCE_ID). Skipping DNS update."
-  continue
-fi
-
-
     echo " IP Addresses of $instance is ${IP}"
 
     aws route53 change-resource-record-sets \
