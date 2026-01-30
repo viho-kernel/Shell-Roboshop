@@ -8,16 +8,6 @@ DOMAIN_NAME="opsora.space"
 for instance in $@
 
 do 
-   EXISTING_ID=$(aws ec2 describe-instances \ 
-   --filters "Name=tag:Name,Values=$instance" "Name=instance-state-name,Values=running,pending" \ 
-   --query 'Reservations[*].Instances[*].InstanceId' \ 
-   --output text
-   )
-
-   if [ $instance -eq "$EXISTING_ID" ]; then
-   echo "Instance ${instance} already present (ID: $EXISTING_ID). Skipping creation." 
-   continue 
-   fi
 
    INSTANCE_ID=$(
 
