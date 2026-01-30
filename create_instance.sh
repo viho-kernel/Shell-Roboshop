@@ -3,7 +3,7 @@
 AMI_ID="ami-0220d79f3f480ecf5"
 SG_ID="sg-0d34a14d6eba15d9d"
 ZONE_ID="Z0738852208EFDOYXFTUB"
-DOMAIN="opsora.space"
+DOMAIN_NAME="opsora.space"
 
 for instance in $@
 
@@ -35,22 +35,15 @@ do
 
    )
     echo "Instance ID of ${instance} is ${INSTANCE_ID}"
-
+    
     if [ $instance == 'frontend' ]; then
-
-     DOMAIN_NAME=${DOMAIN}
-
-    else 
-     DOMAIN_NAME=${'$instance.${DOMAIN}'}
-
-    fi
-
     IP=$(
-    if [ $instance == 'frontend' ]; then
     aws ec2 describe-instances \
     --filters "Name=instance-id,Values=$INSTANCE_ID" \
     --query 'Reservations[].Instances[].PublicIpAddress' \
     --output text
+    
+    RECORD_NAME="$DOMAIN_NAME"
 
     else
     aws ec2 describe-instances \
@@ -58,6 +51,7 @@ do
     --query 'Reservations[].Instances[].PrivateIpAddress' \
     --output text
 
+    RECORD_NAME="$instance.$DOMAIN_NAME" 
     fi
     )
 
