@@ -31,15 +31,6 @@ do
     --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=$instance}]' \
     --query 'Instances[0].InstanceId' \
     --output text
-
-    else
-    
-    exit 1
-
    )
-
-   echo " Instance ID of ${instance} is $INSTANCE_ID "
-
-
-
+    echo " Instance ID of ${instance} is $INSTANCE_ID "
 done
