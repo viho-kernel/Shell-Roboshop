@@ -9,7 +9,7 @@ for instance in $@
 
 do 
    
-   INSTSANCE_ID=$(
+   INSTANCE_ID=$(
 
     if [ $instance == 'mongodb' ]; then
 
