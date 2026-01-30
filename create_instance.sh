@@ -54,9 +54,9 @@ do
     RECORD_NAME="$instance.$DOMAIN_NAME" 
     
     echo " IP Addresses of $instance is ${IP}"
+    )
 
     fi
-    )
 
 
 done
