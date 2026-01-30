@@ -37,4 +37,24 @@ do
 
    )
     echo "Instance ID of ${instance} is ${INSTANCE_ID}"
+
+    IP=$(
+    if [ $instance == 'frontend']; then
+    aws ec2 describe-instances \
+    --filters "Name=instance-id,Values=$INSTANCE_ID" \
+    --query 'Reservations[].Instances[].PublicIpAddress' \
+    --output text
+
+    else
+    aws ec2 describe-instances \
+    --filters "Name=instance-id,Values=$INSTANCE_ID" \
+    --query 'Reservations[].Instances[].PrivateIpAddress' \
+    --output text
+
+    fi
+    )
+
+    echo " IP Addresses of $instance is ${IP}"
+
+
 done
