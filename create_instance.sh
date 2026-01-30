@@ -52,8 +52,9 @@ do
     --output text
 
     RECORD_NAME="$instance.$DOMAIN_NAME" 
-    fi
+    
     )
+    fi
 
     echo " IP Addresses of $instance is ${IP}"
 
