@@ -1,0 +1,45 @@
+#!/bin/bash
+
+AMI_ID="ami-0220d79f3f480ecf5"
+SG_ID="sg-0d34a14d6eba15d9d"
+ZONE_ID="Z0738852208EFDOYXFTUB"
+DOMAIN="opsora.space"
+
+for instance in $@
+do 
+   
+   INSTSANCE_ID=$(
+
+    if [ $instance == 'mongodb' ]; then
+
+    aws ec2 run-instances \
+    --image-id $AMI_ID \
+    --instance-type t3.medium \
+    --security-group-ids $SG_ID \
+    --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=$instance}]' \
+    --query 'Instances[0].InstanceId' \
+    --output text
+
+   
+
+   elif [ $instance == 'catalogue' ]; then
+    
+    aws ec2 run-instances \
+    --image-id ami-0abcdef1234567890 \
+    --instance-type t3.micro \
+    --security-group-ids $SG_ID \
+    --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=$instance}]' \
+    --query 'Instances[0].InstanceId' \
+    --output text
+
+    else
+    
+    exit 1
+
+   )
+
+   echo " Instance ID of ${instance} is $INSTANCE_ID "
+
+
+
+done
