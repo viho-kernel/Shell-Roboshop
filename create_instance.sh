@@ -37,26 +37,26 @@ do
     echo "Instance ID of ${instance} is ${INSTANCE_ID}"
     
     if [ $instance == 'frontend' ]; then
-    IP=$(
+        IP=$(
     aws ec2 describe-instances \
     --filters "Name=instance-id,Values=$INSTANCE_ID" \
     --query 'Reservations[].Instances[].PublicIpAddress' \
     --output text
+    )
     
     RECORD_NAME="$DOMAIN_NAME"
 
     else
+      IP=$(
     aws ec2 describe-instances \
     --filters "Name=instance-id,Values=$INSTANCE_ID" \
     --query 'Reservations[].Instances[].PrivateIpAddress' \
     --output text
-
-    RECORD_NAME="$instance.$DOMAIN_NAME" 
-    
-    echo " IP Addresses of $instance is ${IP}"
     )
 
+    RECORD_NAME="$instance.$DOMAIN_NAME" 
     fi
 
+    echo " IP Addresses of $instance is ${IP}"
 
 done
