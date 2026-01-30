@@ -9,33 +9,36 @@ for instance in $@
 
 do 
 
-   INSTANCE_ID=$(
+   EXISTING_ID=$(aws ec2 describe-instances \
+    --filters "Name=tag:Name,Values=$instance" \
+    --query 'Reservations[*].Instances[*].InstanceId' --output text
+)
+    if [ -n $EXISTING_ID ]; then
+    echo "Instance ${instance} already present (ID: $EXISTING_ID). Skipping creation." INSTANCE_ID=$EXISTING_ID
+    else 
 
-    if [ $instance == 'mongodb' ]; then
+    if [ "$instance" == "mongodb" ] || [ "$instance" == "mysql" ] || [ "$instance" == "shipping" ]; then
 
-    aws ec2 run-instances \
+    INSTANCE_ID=$(aws ec2 run-instances \
     --image-id $AMI_ID \
     --instance-type t3.medium \
     --security-group-ids $SG_ID \
     --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$instance}]" \
     --query 'Instances[0].InstanceId' \
-    --output text
+    --output text)
 
-
-   elif [ $instance == 'catalogue' ]; then
-    
-    aws ec2 run-instances \
+   elif [ "$instance" == "catalogue" ] || [ "$instance" == "frontend" ] || [ "$instance" == "redis" ] || [ "$instance" == "user" ] || [ "$instance" == "cart" ] || [ "$instance" == "rabbitmq" ] || [ "$instance" == "payment" ] || [ "$instance" == "dispatch" ] ; then
+    INSTANCE_ID=$(aws ec2 run-instances \
     --image-id $AMI_ID \
     --instance-type t3.micro \
     --security-group-ids $SG_ID \
     --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$instance}]" \
     --query 'Instances[0].InstanceId' \
-    --output text
+    --output text)
 
     fi
-
-   )
     echo "Instance ID of ${instance} is ${INSTANCE_ID}"
+fi
     
     if [ $instance == 'frontend' ]; then
         IP=$(
