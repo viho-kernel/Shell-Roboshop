@@ -15,8 +15,9 @@ do
     --output text)
 
 if [ -n "$EXISTING_ID" ]; then
-    echo "Instance ${instance} already present (ID: $EXISTING_ID). Skipping creation." INSTANCE_ID=$EXISTING_ID
-    else 
+    INSTANCE_ID=$EXISTING_ID
+    echo "Instance ${instance} already present (ID: $EXISTING_ID). Skipping creation." 
+else 
     if [ "$instance" == "mongodb" ] || [ "$instance" == "mysql" ] || [ "$instance" == "shipping" ]; then
     INSTANCE_ID=$(aws ec2 run-instances \
     --image-id $AMI_ID \
@@ -41,7 +42,7 @@ if [ -n "$EXISTING_ID" ]; then
     echo "Instance ID of ${instance} is ${INSTANCE_ID}"
 
 fi
-    
+
 if [ $instance == 'frontend' ]; then
     IP=$(
     aws ec2 describe-instances \
