@@ -21,8 +21,6 @@ do
     --query 'Instances[0].InstanceId' \
     --output text
 
-   
-
    elif [ $instance == 'catalogue' ]; then
     
     aws ec2 run-instances \
@@ -37,6 +35,15 @@ do
 
    )
     echo "Instance ID of ${instance} is ${INSTANCE_ID}"
+
+    if [ $instance == 'frontend' ]; then
+
+     DOMAIN_NAME=${DOMAIN}
+
+    else 
+     DOMAIN_NAME=${'$instance.${DOMAIN}'}
+
+    fi
 
     IP=$(
     if [ $instance == 'frontend' ]; then
@@ -55,6 +62,7 @@ do
     )
 
     echo " IP Addresses of $instance is ${IP}"
+
 
 
 done
