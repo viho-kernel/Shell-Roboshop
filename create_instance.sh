@@ -26,7 +26,7 @@ do
    elif [ $instance == 'catalogue' ]; then
     
     aws ec2 run-instances \
-    --image-id ami-0abcdef1234567890 \
+    --image-id $AMI_ID \
     --instance-type t3.micro \
     --security-group-ids $SG_ID \
     --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=$instance}]' \
@@ -34,7 +34,7 @@ do
     --output text
 
     fi
-    
+
    )
     echo " Instance ID of ${instance} is $INSTANCE_ID "
 done
