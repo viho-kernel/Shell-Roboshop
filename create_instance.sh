@@ -36,5 +36,5 @@ do
     fi
 
    )
-    echo ' Instance ID of ${instance} is ${INSTANCE_ID} '
+    echo "Instance ID of ${instance} is ${INSTANCE_ID}"
 done
