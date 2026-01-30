@@ -39,7 +39,7 @@ do
     echo "Instance ID of ${instance} is ${INSTANCE_ID}"
 
     IP=$(
-    if [ $instance == 'frontend']; then
+    if [ $instance == 'frontend' ]; then
     aws ec2 describe-instances \
     --filters "Name=instance-id,Values=$INSTANCE_ID" \
     --query 'Reservations[].Instances[].PublicIpAddress' \
