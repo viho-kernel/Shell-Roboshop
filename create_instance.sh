@@ -8,7 +8,17 @@ DOMAIN_NAME="opsora.space"
 for instance in $@
 
 do 
-   
+   EXISTING_ID=$(aws ec2 describe-instances \ 
+   --filters "Name=tag:Name,Values=$instance" "Name=instance-state-name,Values=running,pending" \ 
+   --query 'Reservations[*].Instances[*].InstanceId' \ 
+   --output text
+   )
+
+   if [ $instance -eq "$EXISTING_ID" ]; then
+   echo "Instance ${instance} already present (ID: $EXISTING_ID). Skipping creation." 
+   continue 
+   fi
+
    INSTANCE_ID=$(
 
     if [ $instance == 'mongodb' ]; then
@@ -20,6 +30,7 @@ do
     --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$instance}]" \
     --query 'Instances[0].InstanceId' \
     --output text
+
 
    elif [ $instance == 'catalogue' ]; then
     
@@ -43,7 +54,7 @@ do
     --query 'Reservations[].Instances[].PublicIpAddress' \
     --output text
     )
-    
+
     RECORD_NAME="$DOMAIN_NAME"
 
     else
@@ -58,5 +69,32 @@ do
     fi
 
     echo " IP Addresses of $instance is ${IP}"
+
+    aws route53 change-resource-record-sets \
+    --hosted-zone-id Z1R8UBAEXAMPLE \
+    --change-batch 
+
+    '
+    {
+  "Comment": "Creating A record",
+  "Changes": [
+    {
+      "Action": "CREATE",
+      "ResourceRecordSet": {
+        "Name": "'$RECORD_NAME'",
+        "Type": "A",
+        "TTL": 1,
+        "ResourceRecords": [
+          {
+            "Value": "'$IP'"
+          }
+        ]
+      }
+    }
+  ]
+}
+
+'
+
 
 done
