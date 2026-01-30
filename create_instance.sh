@@ -5,6 +5,8 @@ SG_ID="sg-0d34a14d6eba15d9d"
 ZONE_ID="Z0738852208EFDOYXFTUB"
 DOMAIN_NAME="opsora.space"
 
+
+
 for instance in $@
 
 do 
