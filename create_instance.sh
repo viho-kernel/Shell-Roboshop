@@ -6,6 +6,7 @@ ZONE_ID="Z0738852208EFDOYXFTUB"
 DOMAIN="opsora.space"
 
 for instance in $@
+
 do 
    
    INSTSANCE_ID=$(
@@ -31,6 +32,9 @@ do
     --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=$instance}]' \
     --query 'Instances[0].InstanceId' \
     --output text
+
+    fi
+    
    )
     echo " Instance ID of ${instance} is $INSTANCE_ID "
 done
