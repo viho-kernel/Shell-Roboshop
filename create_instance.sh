@@ -11,8 +11,10 @@ do
 
    EXISTING_ID=$(aws ec2 describe-instances \
     --filters "Name=tag:Name,Values=$instance" \
-    --query 'Reservations[*].Instances[*].InstanceId' --output text
-)
+    "Name=instance-state-name,Values=running,pending" \
+    --query 'Reservations[*].Instances[*].InstanceId' \
+    --output text)
+    
     if [ -n $EXISTING_ID ]; then
     echo "Instance ${instance} already present (ID: $EXISTING_ID). Skipping creation." INSTANCE_ID=$EXISTING_ID
     else 
