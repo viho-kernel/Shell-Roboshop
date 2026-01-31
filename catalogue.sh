@@ -4,6 +4,7 @@ USER_ID=$(id -u)
 LOG_FOLDER="/var/log/Shell-Roboshop-logs"
 LOG_FILE="$LOG_FOLDER/$0.log"
 MONGODB_HOST="mongodb.opsora.space"
+SCRIPT_DIR=$PWD
 
 R="\e[31m"
 G="\e[32m"
