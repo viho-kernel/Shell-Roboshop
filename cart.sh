@@ -32,9 +32,12 @@ fi
 }
  
 dnf module disable nodejs -y &>> $LOG_FILE
+
+VALIDATE $? "Disabling Default nodejs"
+
 dnf module enable nodejs:20 -y &>> $LOG_FILE
 
-VALIDATE $? "Disabling default and enabling 20 version"
+VALIDATE $? "Enabling nodejs 20"
 
 
 dnf install nodejs -y &>> $LOG_FILE
@@ -54,8 +57,6 @@ mkdir -p /app
 curl -L -o /tmp/cart.zip https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip &>> $LOG_FILE
 
 VALIDATE $? "Installing Artifacts"
-
-cd /app 
 
 unzip /tmp/cart.zip &>> $LOG_FILE
 
