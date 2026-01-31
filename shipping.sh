@@ -4,7 +4,7 @@ USER_ID=$(id -u)
 LOG_FOLDER="/var/log/Shell-Roboshop-logs"
 LOG_FILE="$LOG_FOLDER/$0.log"
 SCRIPT_DIR=$PWD
-MYSQL_HOST="mongodb.opsora.space"
+MYSQL_HOST="mysql.opsora.space"
 
 R="\e[31m"
 G="\e[32m"
@@ -33,47 +33,45 @@ fi
 }
 
 dnf install maven -y &>> $LOG_FILE
+VALIDATE $? "Installing Maven (Java)"
 
 id roboshop &>> $LOG_FILE
-
 if [ $? -ne 0 ]; then
    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
-   VALIDATE $? "Creating User"
+   VALIDATE $? "Creating Roboshop User"
 else
    echo -e "Roboshop user already exist ... $Y Skipping $N"
-fi"
+fi
 
-dnf install maven -y 
+#SETUP APP DIRECTORY
 
-mkdir -p /app
-
-curl -L -o /tmp/shipping.zip https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip  &>> $LOG_FILE
+mkdir -p /app $>> $LOG_FILE
+VALIDATE $? "Creating /app directory"
 
 cd /app
+VALIDATE $? "Moving to /app directory"
+
+curl -L -o /tmp/shipping.zip https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip  &>> $LOG_FILE
+VALIDATE $? "Downloading Shipping Artifact"
 
 unzip /tmp/shipping.zip &>> $LOG_FILE
 VALIDATE $? "Unzipping the shipping"
 
-cd /app 
-
 mvn clean package &>> $LOG_FILE
-VALIDATE $? "Building package"
+VALIDATE $? "Building Shipping Application with Maven"
 
 mv target/shipping-1.0.jar shipping.jar &>> $LOG_FILE
-VALIDAE $? "Moving target"
+VALIDAE $? "Renaming shipping jar"
 
 cp $SCRIPT_DIR/shipping.service /etc/systemd/system/shipping.service &>> $LOG_FILE
-
-VALIDATE $? "Copying the shipping service to system file"
+VALIDATE $? "Copying Shipping Service file"
 
 systemctl daemon-reload
 systemctl enable shipping &>>$LOG_FILE
 systemctl start shipping
-
-VALIDATE $? "RELOADING THE SHIPPING SERVICE"
+VALIDATE $? "Starting Shipping Service"
 
 dnf install mysql -y &>> $LOG_FILE
-
 VALIDATE $? "Installing MySQL Client"
 
 mysql -h ${MYSQL_HOST} -uroot -pRoboShop@1 < /app/db/schema.sql
@@ -86,3 +84,4 @@ mysql -h ${MYSQL_HOST} -uroot -pRoboShop@1 < /app/db/master-data.sql
 VALIDATE $? "Loading master-data.sql into MySQL"
 
 systemctl restart shipping
+VALIDATE $? "Restarting Shipping Service"
