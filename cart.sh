@@ -53,9 +53,13 @@ mkdir -p /app
 
 cd /app 
 
+curl -L -o /tmp/cart.zip https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip &>> $LOG_FILE
+VALIDATE $? "Installing Artifacts"
+
 unzip /tmp/cart.zip &>> $LOG_FILE
 
 npm install
+
 VALIDATE $? "Installing Dependencies"
 
 cp $SCRIPT_DIR/cart.service /etc/systemd/system/cart.service 
