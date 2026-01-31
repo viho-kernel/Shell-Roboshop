@@ -49,6 +49,8 @@ else
    echo -e "Roboshop user already exist ... $Y Skipping $N"
 fi
 
+mkdir -p /app
+
 cd /app 
 
 unzip /tmp/cart.zip &>> $LOG_FILE
