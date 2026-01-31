@@ -50,7 +50,6 @@ curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v
 VALIDATE $? "Downloading Frontend Content"
 
 cd /usr/share/nginx/html $>>$LOG_FILE
-VALIDATE $? "Moving to nginx html file"
 
 unzip /tmp/frontend.zip &>>$LOG_FILE
 VALIDATE $? "Unzipping frontend content"
