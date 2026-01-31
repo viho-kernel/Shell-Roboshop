@@ -88,7 +88,7 @@ systemctl restart catalogue &>>$LOG_FILE
 
 VALIDATE $? "Restarting Catalogue" 
 
-systemctl status catalogue &>>$LOGFILE
+systemctl status catalogue &>>$LOG_FILE
 
 VALIDATE $? "Checking catalogue status" 
 
