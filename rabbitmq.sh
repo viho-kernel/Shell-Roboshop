@@ -52,4 +52,5 @@ else
 fi
 
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
+
 VALIDATE $? "Setting RabbitMQ permissions for roboshop"
