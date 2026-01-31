@@ -78,7 +78,7 @@ VALIDATE $? "Starting and enabling catalogue"
 cp $SCRIPT_DIR/mongodb.repo /etc/yum.repos.d/mongo.repo
 VALIDATE $? "Copying mongodb repo file"
 
-dnf install mongodb-mongosh -y &>>$LOGS_FILE
+dnf install mongodb-mongosh -y &>>$LOG_FILE
 
 mongosh --host $MONGODB_HOST </app/db/master-data.js
 
