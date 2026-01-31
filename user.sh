@@ -39,7 +39,7 @@ VALIDATE $? "Enabling nodejs 20 version"
 
 dnf install nodejs -y &>> $LOG_FILE
 
-VALIDATE $? "Disabling default nodejs"
+VALIDATE $? "Installing nodejs"
 
 id roboshop &>> $LOG_FILE
 
@@ -53,27 +53,25 @@ fi
 mkdir -p /app &>> $LOG_FILE
 VALIDATE $? "Creating app"
 
-cd /app
-
-VALIDATE $? "Moving to APP Directory"
-
 curl -L -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip  &>> $LOG_FILE
-
 VALIDATE $? "Downloading Artifact"
 
-unzip /tmp/user.zip &>> $LOG_FILE
+cd /app &>> $LOG_FILE
+VALIDATE $? "Changing to app directory"
 
+unzip /tmp/user.zip &>> $LOG_FILE
 VALIDATE $? "Unzipping Code."
 
-npm install &>> $LOG_FILE
+cd /app &>> $LOG_FILE
+VALIDATE $? "Changing to app directory"
 
+npm install &>> $LOG_FILE
 VALIDATE $? "Installing Dependencies"
 
 cp $SCRIPT_DIR/user.service /etc/systemd/system/user.service &>> $LOG_FILE
-
+VALIDATE $? "Copying user.service"
 
 systemctl daemon-reload
-systemctl enable user   &>> $LOG_FILE
+systemctl enable user &>>$LOG_FILE
 systemctl start user
-
-VALIDATE $? "Reloading and enabling the user"
+VALIDATE $? "Starting and enabling user"
