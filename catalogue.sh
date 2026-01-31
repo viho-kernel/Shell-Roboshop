@@ -62,7 +62,7 @@ VALIDATE $? "Removing existing code"
 unzip /tmp/catalogue.zip &>>$LOG_FILE
 VALIDATE $? "Unzipping the catalogue in APP Directory"
 
-npm install &>> $LOG_FILE
+npm install
 VALIDATE $? "Downloading dependencies"
 
 touch /etc/systemd/system/catalogue.service
