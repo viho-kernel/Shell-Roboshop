@@ -31,11 +31,10 @@ fi
 
 }
  
-dnf module disable nodejs -y &>> $LOG_FILE
-VALIDATE $? "Disabling default nodejs"
+dnf module disable nodejs -y
+dnf module enable nodejs:20 -y
 
-dnf module enable nojejs:20 -y &>> $LOG_FILE
-VALIDATE $? "Enable nodejs 20 version"
+VALIDATE $? "Disabling default and enabling 20 version:
 
 dnf install nodejs -y &>> $LOG_FILE
 VALIDATE $? "Installing nodejs"
@@ -58,7 +57,7 @@ VALIDATE $? "Installing Artifacts"
 
 unzip /tmp/cart.zip &>> $LOG_FILE
 
-npm install
+npm install &>> $LOG_FILE
 
 VALIDATE $? "Installing Dependencies"
 
