@@ -91,8 +91,4 @@ fi
     '
 
     echo "record updated for $instance"
-
-    
-
-
 done
