@@ -51,16 +51,17 @@ fi
 
 mkdir -p /app
 
-cd /app 
-
 curl -L -o /tmp/cart.zip https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip &>> $LOG_FILE
+
 VALIDATE $? "Installing Artifacts"
+
+cd /app 
 
 unzip /tmp/cart.zip &>> $LOG_FILE
 
-cd /app 
+cd /app
 
-npm install
+npm install &>> $LOG_FILE
 
 VALIDATE $? "Installing Dependencies"
 
