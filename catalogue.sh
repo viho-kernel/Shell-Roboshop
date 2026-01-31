@@ -29,26 +29,27 @@ VALIDATE() {
 }
 
 dnf module disable nodejs -y &>>$LOG_FILE
-
 VALIDATE $? "Disabling default nodejs"
  
 dnf module enable nodejs:20 -y &>>$LOG_FILE
-
 VALIDATE $? "Enabling nodejs version 20"
 
 dnf install nodejs -y &>>$LOG_FILE
-
 VALIDATE $? "Installing nodejs"
 
-useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>> $LOG_FILE
+id roboshop &>>$LOG_FILE
 
-VALIDATE $? "Creating User"
+if [ $? -ne 0 ]; then
+    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
+    VALIDATE $? "Creating User"
+else
+   echo -e "Roboshop user already exist ... $Y Skipping $N"
+fi
 
-mkdir /app &>>$LOG_FILE
-
+mkdir -p /app
 VALIDATE $? "Creating APP Directory"
 
-curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>> $LOG_FILE
+curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
 VALIDATE $? "Installing Artifact"
 
 cd /app
@@ -76,9 +77,14 @@ VALIDATE $? "Copying mongodb repo file"
 
 dnf install mongodb-mongosh -y &>>$LOGS_FILE
 
-mongosh --host ${MONGODB_HOST} </app/db/master-data.js
+mongosh --host $MONGODB_HOST </app/db/master-data.js
 
 VALIDATE $? "Loading catalogue schema"
+
+systemctl restart catalogue &>>$LOG_FILE
+
+VALIDATE $? "Restarting Catalogue" 
+
 systemctl status catalogue &>>$LOGFILE
 
 VALIDATE $? "Checking catalogue status" 
