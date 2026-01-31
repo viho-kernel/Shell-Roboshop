@@ -40,8 +40,12 @@ dnf install nginx -y &>>$LOG_FILE
 VALIDATE $? "Installing Nginx -y"
 
 systemctl enable nginx &>>$LOG_FILE
+
+VALIDATE $? "Enabling Nginx"
+
 systemctl start nginx &>>$LOG_FILE
-VALIDATE $? "Enabling and starting Nginx"
+
+VALIDATE $? "Starting Nginx"
 
 rm -rf /usr/share/nginx/html/* &>>$LOG_FILE
 VALIDATE $? "Removing default nginx"
