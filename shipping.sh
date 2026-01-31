@@ -61,7 +61,7 @@ mvn clean package &>> $LOG_FILE
 VALIDATE $? "Building Shipping Application with Maven"
 
 mv target/shipping-1.0.jar shipping.jar &>> $LOG_FILE
-VALIDAE $? "Renaming shipping jar"
+VALIDATE $? "Renaming shipping jar"
 
 cp $SCRIPT_DIR/shipping.service /etc/systemd/system/shipping.service &>> $LOG_FILE
 VALIDATE $? "Copying Shipping Service file"
