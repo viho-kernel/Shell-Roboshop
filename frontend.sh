@@ -53,13 +53,16 @@ VALIDATE $? "Removing default nginx"
 curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip &>>$LOG_FILE
 VALIDATE $? "Downloading Frontend Content"
 
-cd /usr/share/nginx/html $>> $LOG_FILE
+cd /usr/share/nginx/html
 
-unzip /tmp/frontend.zip &>> $LOG_FILE
+unzip /tmp/frontend.zip
+
 VALIDATE $? "Unzipping frontend content"
 
-cp $SCRIPT_DIR/frontend.service /etc/nginx/nginx.conf &>> $LOG_FILE
+cp $SCRIPT_DIR/frontend.service /etc/nginx/nginx.conf
+
 VALIDATE $? "Creating Reverse Proxy configuration"
 
-systemctl restart nginx &>> $LOG_FILE
+systemctl restart nginx
+
 VALIDATE $? "Restarting Nginx Service"
