@@ -22,7 +22,7 @@ VALIDATE() {
     fi
 }
 
-cp mongo.repo /etc/yum.repos.d/mongo.repo
+cp mongodb.repo /etc/yum.repos.d/mongo.repo
 
 VALIDATE $? "Copying Mongo Repo"
 
