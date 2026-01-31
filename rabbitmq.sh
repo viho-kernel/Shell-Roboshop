@@ -14,6 +14,8 @@ P="\e[35m"
 C="\e[36m"
 N="\e[0m"
 
+mkdir -p $LOG_FOLDER
+
 if [ $USER_ID -ne 0 ]; then
    echo -e " $R User is not Root, Run the script as root user. :) " | tee -a $LOG_FILE
    exit 1
