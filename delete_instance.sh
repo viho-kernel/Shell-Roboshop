@@ -16,12 +16,14 @@ for service in "${SERVICES[@]}"; do
     --output text)
 
   if [ -n "$INSTANCE_ID" ]; then
-   if [ "$service" == "frontend" ]; then
 
-    IP=$(aws ec2 describe-instances \
+
+   if [ "$service" == "frontend" ]; then
+     
+     IP=$(aws ec2 describe-instances \
     --filters "Name=tag:Name,Values=$service" \
     --query "Reservations[*].Instances[*].PublicIpAddress" \
-    --output text
+    --output text)
     RECORD_NAME="$DOMAIN_NAME"
 
    else 
@@ -29,19 +31,19 @@ for service in "${SERVICES[@]}"; do
         aws ec2 describe-instances \
     --filters "Name=tag:Name,Values=$service" \
     --query "Reservations[*].Instances[*].PrivateIpAddress" \
-    --output text
-    )
+    --output text)
     RECORD_NAME="$service.$DOMAIN_NAME"
+
     fi
 
-     echo " Terminating $service instance (ID: $INSTANCE_ID)... "
-    aws ec2 terminate-instances --instance-ids $INSTANCE_ID
-  else
-     echo "No running instance found for $service, skipping..."
+    echo " Terminating $service instance (ID: $INSTANCE_ID) "
+    aws ec2 terminate-instances --instance-ids "$INSTANCE_ID"
+
+  echo " Deleting Route53 record: $RECORD_NAME == $IP " 
 
   aws route53 change-resource-record-sets \
-    --hosted-zone-id $ZONE_ID \
-    --change-batch '
+    --hosted-zone-id "$ZONE_ID" \
+    --change-batch "
   {
   "Changes": [
     {
@@ -56,14 +58,11 @@ for service in "${SERVICES[@]}"; do
           }
         ]
       }
-    }
-  ]
-}
-  
-'
-
-
-    )
+    }]
+}"
+else
+     echo "No running instance found for $service, skipping..."
+fi
 
 done
 
