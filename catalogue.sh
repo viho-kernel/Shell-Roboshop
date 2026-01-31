@@ -13,7 +13,7 @@ P="\e[35m"
 C="\e[36m"
 N="\e[0m"
 
-if [ $USERID -ne 0 ]; then
+if [ $USER_ID -ne 0 ]; then
     echo -e "$R Please run this script with root user access $N" | tee -a $LOG_FILE
     exit 1
 fi
@@ -63,6 +63,8 @@ VALIDATE $? "Unzipping the catalogue in APP Directory"
 
 npm install &>> $LOG_FILE
 VALIDATE $? "Downloading dependencies"
+
+touch -p /etc/systemd/system/catalogue.service
 
 cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service
 VALIDATE $? "Created systemctl service"
