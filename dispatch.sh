@@ -64,7 +64,7 @@ VALIDATE $? "Downloading Go dependencies"
 go build &>> $LOG_FILE
 VALIDATE $? "Building Go application"
 
-cp $SCRIPT_DIR/${dispatch.repo} /etc/systemd/system/dispatch.service &>> $LOG_FILE
+cp $SCRIPT_DIR/dispatch.repo /etc/systemd/system/dispatch.service &>> $LOG_FILE
 VALIDATE $? "Copying Scripts"
 
 systemctl daemon-reload
