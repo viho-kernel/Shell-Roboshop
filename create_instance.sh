@@ -65,7 +65,7 @@ if [ $instance == 'frontend' ]; then
 
     RECORD_NAME="$instance.$DOMAIN_NAME" 
 fi
-    echo " IP Addresses of $instance is ${IP}"
+    echo " IP Addresses of $instance is '$IP' "
 
     aws route53 change-resource-record-sets \
     --hosted-zone-id $ZONE_ID \
