@@ -11,7 +11,7 @@ echo "Terminating Roboshop services instancs.."
 for service in "${SERVICES[@]}"; do
 
   INSTANCE_ID=$(aws ec2 describe-instances \
-    --filters "Name=tag:Name,Values=$service" "Name=instance-state-name,Values=running" \
+    --filters "Name=tag:Name,Values=$service" "Name=instance-state-name,Values=running,stopped,pending" \
     --query 'Reservations[*].Instances[*].InstanceId' \
     --output text)
 
