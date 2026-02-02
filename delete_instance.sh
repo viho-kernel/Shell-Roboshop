@@ -42,24 +42,23 @@ for service in "${SERVICES[@]}"; do
   echo " Deleting Route53 record: $RECORD_NAME == $IP " 
 
   aws route53 change-resource-record-sets \
-    --hosted-zone-id "$ZONE_ID" \
-    --change-batch "
-  {
-  "Changes": [
-    {
-      "Action": "DELETE",
-      "ResourceRecordSet": {
-        "Name": "'$RECORD_NAME'",
-        "Type": "A",
-        "TTL": 1,
-        "ResourceRecords": [
-          {
-            "Value": "'$IP'"
-          }
-        ]
+  --hosted-zone-id "$ZONE_ID" \
+  --change-batch "{
+    \"Changes\": [
+      {
+        \"Action\": \"DELETE\",
+        \"ResourceRecordSet\": {
+          \"Name\": \"$RECORD_NAME\",
+          \"Type\": \"A\",
+          \"TTL\": 1,
+          \"ResourceRecords\": [
+            { \"Value\": \"$IP\" }
+          ]
+        }
       }
-    }]
-}"
+    ]
+  }"
+
 else
      echo "No running instance found for $service, skipping..."
 fi
